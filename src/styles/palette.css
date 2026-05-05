@@ -1,0 +1,18 @@
+/* 색상 관련 변수를 관리합니다. */
+:root {
+  /* 배경 */
+  --color-bg: #0d1117;
+
+  /* 카드 */
+  --color-card: #161b22;
+
+  /* 사이드바 */
+  --color-sidebar: #1e2126;
+
+  /* 텍스트 */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #c9d1d9;
+
+  /* 버튼 */
+  --color-btn: #51555a;
+}

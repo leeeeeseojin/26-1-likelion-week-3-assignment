@@ -166,6 +166,7 @@ textarea {
   background-color: transparent;
   outline: none;
   border: none;
+  font: inherit;
 }
 body {
   font-family: "NotoSerifKR", serif;

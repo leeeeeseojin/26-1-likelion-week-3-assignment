@@ -167,3 +167,6 @@ textarea {
   outline: none;
   border: none;
 }
+body {
+  font-family: "NotoSerifKR", serif;
+}

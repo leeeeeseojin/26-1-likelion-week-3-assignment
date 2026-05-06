@@ -2,7 +2,7 @@
 .main-page {
   display: flex;
   flex-direction: column;
-  width: 1440px;
+  width: 100%;
   background-color: var(--color-bg);
 }
 
@@ -10,4 +10,6 @@
   display: flex;
   padding: 35px 80px;
   gap: 38px;
+  /* 전체 화면 높이 - (header+filterbar+footer 높이) */
+  min-height: calc(100vh - 210px);
 }

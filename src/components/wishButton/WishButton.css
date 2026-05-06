@@ -1,0 +1,14 @@
+/* WishButton */
+.wish-button {
+  height: 25px;
+  padding: 0 12px;
+  background-color: var(--color-btn);
+  border-radius: 5px;
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.wish-button--active {
+  background-color: var(--color-text-secondary);
+  color: var(--color-card);
+}

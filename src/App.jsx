@@ -1,9 +1,7 @@
+import MainPage from "./pages/mainPage/entry/MainPage";
+
 function App() {
-  return (
-    <div>
-      <h1>KWU LIKELION THEATER</h1>
-    </div>
-  );
+  return <MainPage />;
 }
 
 export default App;

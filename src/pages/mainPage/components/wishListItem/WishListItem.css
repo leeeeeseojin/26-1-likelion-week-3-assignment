@@ -2,7 +2,7 @@
 .wish-list-item {
   display: flex;
   align-items: center;
-  width: 268px;
+  width: 100%;
   height: 46px;
   padding: 0 20px;
   background-color: var(--color-card);
@@ -12,4 +12,7 @@
 .wish-list-item__title {
   font-size: var(--font-size-md);
   color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -1,0 +1,8 @@
+/* MovieGrid */
+.movie-grid {
+  display: grid;
+  /* 420px짜리 2열 grid */
+  grid-template-columns: repeat(2, 420px);
+
+  gap: 20px 80px;
+}

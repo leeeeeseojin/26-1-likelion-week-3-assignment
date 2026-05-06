@@ -1,0 +1,65 @@
+/* MovieCard */
+.movie-card {
+  display: flex;
+  width: 420px;
+  height: 210px;
+  padding: 25px 24px;
+  background-color: var(--color-card);
+  border-radius: 20px;
+  gap: 16px;
+}
+
+.movie-card__info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+}
+
+.movie-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.movie-card__title {
+  font-size: 20px;
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.movie-card__rating {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.movie-card__description {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height);
+  flex: 1;
+  overflow: hidden;
+
+  /* 텍스트 3줄 초과 시 ... 처리 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.movie-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.movie-card__release {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.movie-card__thumbnail {
+  width: 148px;
+  height: 160px;
+  border-radius: 15px;
+  border: 1px solid var(--color-text-secondary);
+}

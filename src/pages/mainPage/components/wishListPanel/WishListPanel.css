@@ -1,0 +1,22 @@
+/* WishListPanel */
+.wish-list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 360px;
+  background-color: var(--color-sidebar);
+  border-radius: 10px;
+  padding: 24px 46px;
+}
+
+.wish-list-panel__title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.wish-list-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

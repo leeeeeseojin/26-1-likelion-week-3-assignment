@@ -1,79 +1,93 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "../../../components/header/Header";
 import Footer from "../../../components/footer/Footer";
 import FilterBar from "../components/filterBar/FilterBar";
 import MovieGrid from "../components/movieGrid/MovieGrid";
 import WishListPanel from "../components/wishListPanel/WishListPanel";
-import { movies } from "../utils/MainPageDummy";
+import {
+  fetchPopularMovies,
+  fetchGenres,
+  fetchMoviesByGenre,
+  searchMovies,
+  convertSortOption,
+} from "../../../apis/movieApi";
+import { formatMovie } from "../utils/formatMovie";
 import "./MainPage.css";
 
 export default function MainPage() {
-  // 검색어 상태
+  const [movies, setMovies] = useState([]);
+  const [genreList, setGenreList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // 선택된 장르 상태
   const [selectedGenre, setSelectedGenre] = useState("전체");
-
-  // 선택된 정렬 상태
   const [selectedSort, setSelectedSort] = useState("기본순");
-
-  // 위시리스트 상태
   const [wishList, setWishList] = useState([]);
 
-  // 위시 버튼 클릭 시 추가/제거
+  // 장르 목록은 한 번만 불러오면 되므로 의존성 배열을 []로 설정
+  useEffect(() => {
+    const loadGenres = async () => {
+      const genres = await fetchGenres();
+      setGenreList(genres);
+    };
+    loadGenres();
+  }, []);
+
+  // 검색어/장르/정렬이 바뀔 때마다 영화 목록을 다시 불러옴
+  useEffect(() => {
+    const loadMovies = async () => {
+      let rawMovies;
+
+      // 검색어 > 장르 > 기본 순서로 우선순위 적용
+      if (searchQuery) {
+        rawMovies = await searchMovies(searchQuery);
+      } else if (selectedGenre !== "전체") {
+        const genreId = genreList.find((g) => g.name === selectedGenre)?.id;
+        const sortBy = convertSortOption(selectedSort);
+        rawMovies = await fetchMoviesByGenre(genreId, sortBy);
+      } else {
+        rawMovies = await fetchPopularMovies();
+      }
+
+      // TMDB 응답 형식을 컴포넌트에서 사용하는 형식으로 변환
+      const formatted = rawMovies.map((movie) => formatMovie(movie, genreList));
+      setMovies(formatted);
+    };
+
+    // genreList가 준비된 후에만 실행
+    if (genreList.length > 0 || searchQuery) {
+      loadMovies();
+    }
+  }, [searchQuery, selectedGenre, selectedSort, genreList]);
+
+  // 검색 API는 sort_by를 지원하지 않으므로 검색 중일 때만 프론트에서 정렬
+  const displayedMovies = useMemo(() => {
+    if (!searchQuery) return movies;
+
+    const sorted = [...movies];
+
+    if (selectedSort === "별점 높은순") {
+      sorted.sort((a, b) => b.rating - a.rating);
+    } else if (selectedSort === "별점 낮은순") {
+      sorted.sort((a, b) => a.rating - b.rating);
+    } else if (selectedSort === "최신순") {
+      sorted.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+    } else if (selectedSort === "오래된순") {
+      sorted.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+    }
+
+    return sorted;
+  }, [movies, searchQuery, selectedSort]);
+
+  // 단순 값 선택( -> 삼항연산자 사용
   const handleWishToggle = (movie) => {
     setWishList((prev) => {
       const isWished = prev.some((w) => w.id === movie.id);
-      if (isWished) {
-        // 이미 있으면 제거
-        return prev.filter((w) => w.id !== movie.id);
-      }
-      // 없으면 추가
-      return [...prev, movie];
+      return isWished
+        ? prev.filter((w) => w.id !== movie.id)
+        : [...prev, movie];
     });
   };
 
-  // 검색, 장르, 정렬 필터링
-  const filteredMovies = useMemo(() => {
-    let result = [...movies];
-
-    // 검색어 필터
-    if (searchQuery) {
-      result = result.filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
-      ); // 문자열을 소문자로 바꿔서 찾을 수 있게 함
-    }
-
-    // 장르 필터
-    if (selectedGenre !== "전체") {
-      result = result.filter((movie) => movie.genre === selectedGenre);
-    }
-
-    // 정렬
-    switch (selectedSort) {
-      // 결과가 음수면 a가 앞으로, 결과가 양수면 b가 앞으로
-      case "별점 높은순":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      case "별점 낮은순":
-        result.sort((a, b) => a.rating - b.rating);
-        break;
-      case "최신순":
-        result.sort(
-          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate),
-        );
-        break;
-      case "오래된순":
-        result.sort(
-          (a, b) => new Date(a.releaseDate) - new Date(b.releaseDate),
-        );
-        break;
-      default:
-        break;
-    }
-
-    return result;
-  }, [searchQuery, selectedGenre, selectedSort]);
+  const genreOptions = ["전체", ...genreList.map((g) => g.name)];
 
   return (
     <div className="main-page">
@@ -83,10 +97,11 @@ export default function MainPage() {
         onGenreChange={setSelectedGenre}
         selectedSort={selectedSort}
         onSortChange={setSelectedSort}
+        genres={genreOptions}
       />
       <div className="main-page__body">
         <MovieGrid
-          movies={filteredMovies}
+          movies={displayedMovies}
           wishList={wishList}
           onWishToggle={handleWishToggle}
         />

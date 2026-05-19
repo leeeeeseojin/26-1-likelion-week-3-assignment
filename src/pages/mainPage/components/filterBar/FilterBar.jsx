@@ -1,5 +1,5 @@
 import Dropdown from "../../../../components/dropdown/Dropdown";
-import { genres, sortOptions } from "../../utils/MainPageDummy";
+import { sortOptions } from "../../utils/MainPageDummy";
 import "./FilterBar.css";
 
 export default function FilterBar({
@@ -7,6 +7,7 @@ export default function FilterBar({
   onGenreChange,
   selectedSort,
   onSortChange,
+  genres,
 }) {
   return (
     <div className="filter-bar">

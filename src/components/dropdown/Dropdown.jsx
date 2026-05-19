@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import DropdownIcon from "../../assets/icon/dropdown-icon.svg?react";
+import { DropdownIcon } from "../../assets/icon/icons";
 import "./Dropdown.css";
 
 export default function Dropdown({ label, options, selected, onSelect }) {

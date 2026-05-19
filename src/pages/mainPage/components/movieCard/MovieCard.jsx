@@ -1,5 +1,5 @@
 import WishButton from "../../../../components/wishButton/WishButton";
-import thumbnailPlaceholder from "../../../../assets/icon/thumbnail-placeholder.svg";
+import { thumbnailPlaceholder } from "../../../../assets/icon/icons";
 import "./MovieCard.css";
 
 export default function MovieCard({ movie, isWished, onWishToggle }) {
